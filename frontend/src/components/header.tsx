@@ -1,5 +1,6 @@
 import { CodeXml, Signal, User } from "lucide-react";
 import NavLink from "./nav-link";
+import { ModeToggle } from "./mode-toggle";
 
 export const Header = () => {
   return (
@@ -18,6 +19,10 @@ export const Header = () => {
             Níveis
           </NavLink>
         </nav>
+
+        <div className="ml-auto flex items-center gap-2">
+          <ModeToggle />
+        </div>
       </div>
     </div>
   );
