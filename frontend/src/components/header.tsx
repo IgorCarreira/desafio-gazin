@@ -8,12 +8,12 @@ export const Header = () => {
         <CodeXml className="size-6" />
 
         <nav className="flex items-center space-x-4 lg:space-x-6">
-          <NavLink to="/">
+          <NavLink to="/desenvolvedores">
             <User className="size-4" />
             Desenvolvedores
           </NavLink>
 
-          <NavLink to="/levels">
+          <NavLink to="/niveis">
             <Signal className="size-4" />
             Níveis
           </NavLink>
