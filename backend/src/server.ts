@@ -7,8 +7,24 @@ import { createLevel } from "./http/routes/level/create-level";
 import { deleteLevel } from "./http/routes/level/delete-level";
 import { listLevels } from "./http/routes/level/list-levels";
 import { updateLevel } from "./http/routes/level/patch-level";
+import swagger from "@fastify/swagger";
+import swaggerUi from "@fastify/swagger-ui";
 
 const app = fastify();
+
+app.register(swagger, {
+  swagger: {
+    info: {
+      title: "API de Desenvolvedores",
+      description: "Documentação da API para gerenciar desenvolvedores",
+      version: "1.0.0",
+    },
+  },
+});
+
+app.register(swaggerUi, {
+  routePrefix: "/docs",
+});
 
 app.register(createLevel);
 app.register(updateLevel);
