@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: bitnami/postgresql:latest
+    container_name: cadastro_desenvolvedor_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: cadastro_desenvolvedor
+    ports:
+      - 5432:5432
+    volumes:
+      - cadastro_desenvolvedor_data:/bitnami/postgresql
+
+volumes:
+  cadastro_desenvolvedor_data:
