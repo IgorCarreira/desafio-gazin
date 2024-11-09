@@ -4,7 +4,7 @@ import { prisma } from "../../../lib/prisma";
 import { Prisma } from "@prisma/client";
 
 export async function listLevels(app: FastifyInstance) {
-  app.get("/api/niveis", async (request, reply) => {
+  app.get("/api/niveis", { schema }, async (request, reply) => {
     const querySchema = z.object({
       nivel: z.string().optional(),
       current_page: z.number().min(1).default(1),
@@ -50,3 +50,69 @@ export async function listLevels(app: FastifyInstance) {
     }
   });
 }
+
+const schema = {
+  description: "Lista níveis com paginação e filtros.",
+  tags: ["Níveis"],
+  querystring: {
+    type: "object",
+    properties: {
+      nivel: {
+        type: "string",
+        description: "Nome do nível para filtro",
+        nullable: true,
+      },
+      current_page: {
+        type: "number",
+        description: "Página atual",
+        minimum: 1,
+        default: 1,
+      },
+      per_page: {
+        type: "number",
+        description: "Número de níveis por página",
+        minimum: 1,
+        maximum: 100,
+        default: 10,
+      },
+    },
+  },
+  response: {
+    200: {
+      description: "Lista de níveis.",
+      type: "object",
+      properties: {
+        data: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              id: { type: "number", description: "ID do nível" },
+              nivel: { type: "string", description: "Nome do nível" },
+            },
+          },
+        },
+        meta: {
+          type: "object",
+          properties: {
+            total: { type: "number", description: "Total de níveis" },
+            current_page: { type: "number", description: "Página atual" },
+            per_page: {
+              type: "number",
+              description: "Número de níveis por página",
+            },
+            last_page: { type: "number", description: "Última página" },
+          },
+        },
+      },
+    },
+    400: {
+      description: "Erro ao listar níveis.",
+      type: "object",
+      properties: {
+        message: { type: "string", description: "Mensagem de erro" },
+        error: { type: "object", description: "Detalhes do erro" },
+      },
+    },
+  },
+};

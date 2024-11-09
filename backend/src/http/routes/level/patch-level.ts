@@ -3,7 +3,7 @@ import { z } from "zod";
 import { prisma } from "../../../lib/prisma";
 
 export async function updateLevel(app: FastifyInstance) {
-  app.patch("/api/niveis/:id", async (request, reply) => {
+  app.patch("/api/niveis/:id", { schema }, async (request, reply) => {
     const paramsSchema = z.object({
       id: z.preprocess(
         (arg) => (typeof arg === "string" ? Number(arg) : arg),
@@ -33,3 +33,39 @@ export async function updateLevel(app: FastifyInstance) {
     }
   });
 }
+const schema = {
+  description: "Atualiza as informações de um nível pelo ID.",
+  tags: ["Níveis"],
+  params: {
+    type: "object",
+    properties: {
+      id: { type: "number", description: "ID do nível a ser atualizado" },
+    },
+    required: ["id"],
+  },
+  body: {
+    type: "object",
+    properties: {
+      nivel: { type: "string", description: "Nome do nível" },
+    },
+    required: ["nivel"],
+  },
+  response: {
+    200: {
+      description: "Nível atualizado com sucesso.",
+      type: "object",
+      properties: {
+        id: { type: "number", description: "ID do nível" },
+        nivel: { type: "string", description: "Nome do nível" },
+      },
+    },
+    400: {
+      description: "Erro ao atualizar o nível.",
+      type: "object",
+      properties: {
+        message: { type: "string", description: "Mensagem de erro" },
+        error: { type: "object", description: "Detalhes do erro" },
+      },
+    },
+  },
+};
