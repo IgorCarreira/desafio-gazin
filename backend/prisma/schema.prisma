@@ -18,6 +18,7 @@ model Desenvolvedor {
   nivel           Nivel    @relation(fields: [nivel_id], references: [id])
   nivel_id        Int
   nome            String
+  sexo            String   @db.Char()
   data_nascimento DateTime
   hobby           String
 }
