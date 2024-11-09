@@ -1,0 +1,28 @@
+import { FastifyInstance } from "fastify";
+import { z } from "zod";
+import { prisma } from "../../../lib/prisma";
+
+export async function deleteLevel(app: FastifyInstance) {
+  app.delete("/api/niveis/:id", async (request, reply) => {
+    const paramsSchema = z.object({
+      id: z.preprocess(
+        (arg) => (typeof arg === "string" ? Number(arg) : arg),
+        z.number()
+      ),
+    });
+
+    try {
+      const { id } = paramsSchema.parse(request.params);
+
+      await prisma.nivel.delete({
+        where: { id },
+      });
+
+      return reply.status(204).send({ message: "Nível removido com sucesso." });
+    } catch (error) {
+      return reply
+        .status(400)
+        .send({ message: "Erro ao remover nível.", error });
+    }
+  });
+}
