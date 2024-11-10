@@ -1,3 +1,6 @@
+import cors from "@fastify/cors";
+import swagger from "@fastify/swagger";
+import swaggerUi from "@fastify/swagger-ui";
 import fastify from "fastify";
 import { createDeveloper } from "./http/routes/developer/create-developer";
 import { deleteDeveloper } from "./http/routes/developer/delete-developer";
@@ -7,8 +10,6 @@ import { createLevel } from "./http/routes/level/create-level";
 import { deleteLevel } from "./http/routes/level/delete-level";
 import { listLevels } from "./http/routes/level/list-levels";
 import { updateLevel } from "./http/routes/level/patch-level";
-import swagger from "@fastify/swagger";
-import swaggerUi from "@fastify/swagger-ui";
 
 const app = fastify();
 
@@ -24,6 +25,10 @@ app.register(swagger, {
 
 app.register(swaggerUi, {
   routePrefix: "/docs",
+});
+
+app.register(cors, {
+  origin: true,
 });
 
 app.register(createLevel);
