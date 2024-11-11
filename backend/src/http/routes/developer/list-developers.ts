@@ -29,6 +29,9 @@ export async function listDevelopers(app: FastifyInstance) {
         where: filters,
         skip: offset,
         take: per_page,
+        include: {
+          nivel: true,
+        },
       });
 
       const totalDevelopers = await prisma.desenvolvedor.count({
@@ -97,6 +100,14 @@ const schema = {
                 description: "Data de nascimento",
               },
               hobby: { type: "string", description: "Hobby do desenvolvedor" },
+              nivel: {
+                type: "object",
+                description: "Nível do desenvolvedor",
+                properties: {
+                  id: { type: "number", description: "ID do nível" },
+                  nivel: { type: "string", description: "Nome do nível" },
+                },
+              },
             },
           },
         },
