@@ -11,7 +11,12 @@ export function App() {
       <HelmetProvider>
         <Helmet titleTemplate="Gazin | %s" />
         <Toaster richColors />
-        <RouterProvider router={router} />
+        <RouterProvider
+          router={router}
+          future={{
+            v7_startTransition: true,
+          }}
+        />
       </HelmetProvider>
     </ThemeProvider>
   );
