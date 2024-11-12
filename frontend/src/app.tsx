@@ -10,7 +10,7 @@ export function App() {
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <HelmetProvider>
         <Helmet titleTemplate="Gazin | %s" />
-        <Toaster richColors />
+        <Toaster theme="dark" />
         <RouterProvider
           router={router}
           future={{
