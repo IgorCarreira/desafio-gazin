@@ -1,4 +1,6 @@
 import { Pagination } from "@/components/pagination";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -9,11 +11,15 @@ import {
 import useFetchData from "@/hooks/useFetchData";
 import { useFilter } from "@/hooks/useFilter";
 import { Developer, DeveloperFilterRequest } from "@/types/developer";
+import { UserRoundPlus } from "lucide-react";
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
+import { DeveloperCreateDialog } from "./developer-create-dialog";
 import { DeveloperFilters } from "./developer-filters";
 import DeveloperTableRow from "./developers-table-row";
 
 export const Developers = () => {
+  const [openCreateDialog, setOpenCreateDialog] = useState(false);
   const { page, query, updatePage, updateQuery } =
     useFilter<DeveloperFilterRequest>();
 
@@ -31,6 +37,7 @@ export const Developers = () => {
 
   const onUpdate = () => {
     mutate();
+    setOpenCreateDialog(false);
   };
 
   const onSearch = (newSearchParams: DeveloperFilterRequest) => {
@@ -38,11 +45,30 @@ export const Developers = () => {
     mutate();
   };
 
+  const handleClickEdit = () => {
+    setOpenCreateDialog(true);
+  };
+
   return (
     <>
       <Helmet title="Desenvolvedores" />
       <div className="flex flex-col gap-4">
-        <h1 className="text-3xl font-bold tracking-tight">Desenvolvedores</h1>
+        <div className="flex justify-between">
+          <h1 className="text-3xl font-bold tracking-tight">Desenvolvedores</h1>
+          <Dialog open={openCreateDialog} onOpenChange={setOpenCreateDialog}>
+            <DialogTrigger>
+              <Button size="xs" onClick={handleClickEdit}>
+                <UserRoundPlus />
+                Cadastrar desenvolvedor
+              </Button>
+            </DialogTrigger>
+
+            <DeveloperCreateDialog
+              onUpdate={onUpdate}
+              open={openCreateDialog}
+            />
+          </Dialog>
+        </div>
 
         <div className="space-y-2.5">
           <DeveloperFilters onSearch={onSearch} />
