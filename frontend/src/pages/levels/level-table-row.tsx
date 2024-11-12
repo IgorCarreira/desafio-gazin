@@ -7,6 +7,7 @@ import { Pencil, X } from "lucide-react";
 import { toast } from "sonner";
 import { LevelPatchDialog } from "./level-patch-dialog";
 import { LevelAlertDialog } from "./level-alert-dialog";
+import { useState } from "react";
 
 interface LevelTableRowProps {
   level: Level;
@@ -14,6 +15,8 @@ interface LevelTableRowProps {
 }
 
 export const LevelTableRow = ({ level, onUpdate }: LevelTableRowProps) => {
+  const [openPatchDialog, setOpenPatchDialog] = useState(false);
+
   const handleClickDelete = async () => {
     const response = await fetch(
       `http://localhost:3030/api/niveis/${level.id}`,
@@ -36,14 +39,20 @@ export const LevelTableRow = ({ level, onUpdate }: LevelTableRowProps) => {
       <TableCell className="font-medium">{level.nivel}</TableCell>
 
       <TableCell>
-        <Dialog>
+        <Dialog open={openPatchDialog} onOpenChange={setOpenPatchDialog}>
           <DialogTrigger asChild>
             <Button variant="outline" size="xs">
               <Pencil className="mr-1 size-3" />
               Editar
             </Button>
           </DialogTrigger>
-          <LevelPatchDialog level={level} onUpdate={onUpdate} />
+          <LevelPatchDialog
+            level={level}
+            onUpdate={() => {
+              onUpdate();
+              setOpenPatchDialog(false);
+            }}
+          />
         </Dialog>
       </TableCell>
 
