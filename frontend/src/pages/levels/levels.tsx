@@ -36,9 +36,9 @@ export const Levels = () => {
 
   return (
     <>
-      <Helmet title="Desenvolvedores" />
+      <Helmet title="Níveis" />
       <div className="flex flex-col gap-4">
-        <h1 className="text-3xl font-bold tracking-tight">Desenvolvedores</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Níveis</h1>
 
         <div className="space-y-2.5">
           <LevelFilters onSearch={onSearch} />
