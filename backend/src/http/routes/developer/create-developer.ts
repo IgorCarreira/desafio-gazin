@@ -5,7 +5,10 @@ import { prisma } from "../../../lib/prisma";
 export async function createDeveloper(app: FastifyInstance) {
   app.post("/api/desenvolvedores", { schema }, async (request, reply) => {
     const createDeveloperBody = z.object({
-      nivel_id: z.number(),
+      nivel_id: z.preprocess(
+        (arg) => (typeof arg === "string" ? Number(arg) : arg),
+        z.number()
+      ),
       nome: z.string(),
       sexo: z.string(),
       data_nascimento: z.preprocess((arg) => {
