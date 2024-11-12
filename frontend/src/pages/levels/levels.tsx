@@ -1,4 +1,6 @@
 import { Pagination } from "@/components/pagination";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -9,11 +11,16 @@ import {
 import useFetchData from "@/hooks/useFetchData";
 import { useFilter } from "@/hooks/useFilter";
 import { Level, LevelFilterRequest } from "@/types/level";
+import { Plus } from "lucide-react";
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { LevelTableRow } from "./level-table-row";
+import { LevelCreateDialog } from "./level-create-dialog";
 import { LevelFilters } from "./level-filters";
+import { LevelTableRow } from "./level-table-row";
 
 export const Levels = () => {
+  const [openCreateDialog, setOpenCreateDialog] = useState(false);
+
   const { page, query, updatePage, updateQuery } =
     useFilter<LevelFilterRequest>();
 
@@ -34,11 +41,32 @@ export const Levels = () => {
     mutate();
   };
 
+  const handleOpenDialog = () => {
+    setOpenCreateDialog(true);
+  };
+
   return (
     <>
       <Helmet title="Níveis" />
       <div className="flex flex-col gap-4">
-        <h1 className="text-3xl font-bold tracking-tight">Níveis</h1>
+        <div className="flex justify-between">
+          <h1 className="text-3xl font-bold tracking-tight">Níveis</h1>
+          <Dialog open={openCreateDialog} onOpenChange={setOpenCreateDialog}>
+            <DialogTrigger>
+              <Button size="xs" onClick={handleOpenDialog}>
+                <Plus />
+                Cadastrar nível
+              </Button>
+            </DialogTrigger>
+
+            <LevelCreateDialog
+              onUpdate={() => {
+                onUpdate();
+                setOpenCreateDialog(false);
+              }}
+            />
+          </Dialog>
+        </div>
 
         <div className="space-y-2.5">
           <LevelFilters onSearch={onSearch} />
