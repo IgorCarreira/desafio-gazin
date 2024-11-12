@@ -6,27 +6,36 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Developer, DeveloperBodyRequest } from "@/types/developer";
+import { Form } from "@/components/ui/form";
+import { DatePickerField } from "@/components/ui/form/date-picker-field";
+import { SelectField } from "@/components/ui/form/select-field";
+import { TextInputField } from "@/components/ui/form/text-input-field";
+import { Developer } from "@/types/developer";
 import { FetchDataResponse } from "@/types/fetch-data-response";
 import { Level } from "@/types/level";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import useSWR from "swr";
+import { z } from "zod";
 
 interface DeveloperPatchDialogProps {
   developer: Developer & { nivel_id: number };
   onUpdate: () => void;
   open: boolean;
 }
+
+const developerPatchSchema = z.object({
+  nome: z.string().min(1, "Obrigatório"),
+  data_nascimento: z.string(),
+  sexo: z
+    .string()
+    .min(1, "Obrigatório")
+    .max(1, 'Deve conter apenas uma letra: "m" ou "f"'),
+  nivel_id: z.coerce.number({ required_error: "Obrigatório" }),
+  hobby: z.string().min(1, "Obrigatório"),
+});
+
+type DeveloperPatchSchema = z.infer<typeof developerPatchSchema>;
 
 export const DeveloperPatchDialog = ({
   developer,
@@ -38,11 +47,11 @@ export const DeveloperPatchDialog = ({
     fetcher
   );
 
-  const { register, handleSubmit, control } = useForm<DeveloperBodyRequest>({
+  const form = useForm<DeveloperPatchSchema>({
     defaultValues: developer,
   });
 
-  const onSubmit: SubmitHandler<DeveloperBodyRequest> = async (data) => {
+  const onSubmit: SubmitHandler<DeveloperPatchSchema> = async (data) => {
     const response = await fetch(
       `http://localhost:3030/api/desenvolvedores/${developer.id}`,
       {
@@ -67,58 +76,40 @@ export const DeveloperPatchDialog = ({
       <DialogHeader>
         <DialogTitle>Editar</DialogTitle>
       </DialogHeader>
+      <Form {...form}>
+        <form
+          id="developerForm"
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="grid grid-cols-2 gap-3"
+        >
+          <TextInputField control={form.control} name="nome" label="Nome" />
 
-      <form
-        id="developerForm"
-        onSubmit={handleSubmit(onSubmit)}
-        className="grid grid-cols-2 gap-3"
-      >
-        <div className="space-y-2">
-          <Label htmlFor="nome">Nome</Label>
-          <Input id="nome" {...register("nome")} />
-        </div>
+          <TextInputField control={form.control} name="sexo" label="Sexo" />
 
-        <div className="space-y-2">
-          <Label htmlFor="sexo">Sexo</Label>
-          <Input id="sexo" {...register("sexo")} />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="data_nascimento">Data de nascimento</Label>
-          <Input id="data_nascimento" {...register("data_nascimento")} />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="nivel_id">Nível</Label>
-          <Controller
-            name="nivel_id"
-            control={control}
-            rules={{ required: "O nível é obrigatório" }}
-            render={({ field }) => (
-              <Select
-                onValueChange={field.onChange}
-                value={String(field.value)}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {levelOptions?.data?.map((option) => (
-                    <SelectItem value={String(option.id)} key={option.id}>
-                      {option.nivel}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
+          <DatePickerField
+            control={form.control}
+            label="Data de nascimento"
+            name="data_nascimento"
           />
-        </div>
 
-        <div className="space-y-2 col-span-2">
-          <Label htmlFor="hobby">Hobby</Label>
-          <Input id="hobby" {...register("hobby")} />
-        </div>
-      </form>
+          <SelectField
+            control={form.control}
+            label="Nível"
+            options={levelOptions?.data || []}
+            name="nivel_id"
+            labelKey="nivel"
+            valueKey="id"
+          />
+
+          <TextInputField
+            control={form.control}
+            label="Hooby"
+            name="hobby"
+            className="col-span-2"
+          />
+        </form>
+      </Form>
+
       <DialogClose>
         <Button
           type="submit"
