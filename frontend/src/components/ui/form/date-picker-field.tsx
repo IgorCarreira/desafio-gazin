@@ -37,14 +37,12 @@ export const DatePickerField = ({
           <PopoverTrigger asChild>
             <FormControl>
               <Button variant={"outline"} className="w-full">
-                {field.value ? (
-                  format(
-                    parse(field.value, "yyyy-MM-dd", new Date()),
-                    "dd/MM/yyyy"
-                  )
-                ) : (
-                  <span>Escolher data</span>
-                )}
+                {field.value
+                  ? format(
+                      parse(field.value, "yyyy-MM-dd", new Date()),
+                      "dd/MM/yyyy"
+                    )
+                  : null}
                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
               </Button>
             </FormControl>
