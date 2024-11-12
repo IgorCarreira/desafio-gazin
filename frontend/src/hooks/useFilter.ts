@@ -38,7 +38,7 @@ export const useFilter = <T>() => {
   const updateURLParams = useCallback((newParams: T) => {
     const url = new URL(window.location.toString());
     Array.from(url.searchParams.keys()).forEach((key) => {
-      if (key !== "current_page") url.searchParams.delete(key);
+      url.searchParams.delete(key);
     });
     Object.entries(newParams as Record<string, unknown>).forEach(
       ([key, value]) => {
