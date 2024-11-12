@@ -1,30 +1,38 @@
 import { Button } from "@/components/ui/button";
 import {
-  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Level, LevelBodyRequest } from "@/types/level";
+import { Form } from "@/components/ui/form";
+import { TextInputField } from "@/components/ui/form/text-input-field";
+import { Level } from "@/types/level";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { z } from "zod";
 
 interface LevelPatchDialogProps {
   level: Level;
   onUpdate: () => void;
 }
 
+const levelPatchSchema = z.object({
+  nivel: z.string().min(1, "Obrigatório"),
+});
+
+type LevelPatchSchema = z.infer<typeof levelPatchSchema>;
+
 export const LevelPatchDialog = ({
   level,
   onUpdate,
 }: LevelPatchDialogProps) => {
-  const { register, handleSubmit } = useForm<LevelBodyRequest>({
+  const form = useForm<LevelPatchSchema>({
     defaultValues: level,
+    resolver: zodResolver(levelPatchSchema),
   });
 
-  const onSubmit: SubmitHandler<LevelBodyRequest> = async (data) => {
+  const onSubmit: SubmitHandler<LevelPatchSchema> = async (data) => {
     const response = await fetch(
       `http://localhost:3030/api/niveis/${level.id}`,
       {
@@ -50,17 +58,23 @@ export const LevelPatchDialog = ({
         <DialogTitle>Editar</DialogTitle>
       </DialogHeader>
 
-      <form id="levelForm" onSubmit={handleSubmit(onSubmit)} className="flex">
-        <div className="space-y-2 w-full">
-          <Label htmlFor="nivel">Nível</Label>
-          <Input id="nivel" {...register("nivel")} />
-        </div>
-      </form>
-      <DialogClose>
-        <Button type="submit" size="xs" className="ml-auto" form="levelForm">
-          Aplicar alterações
-        </Button>
-      </DialogClose>
+      <Form {...form}>
+        <form
+          id="levelForm"
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex"
+        >
+          <TextInputField
+            label="Nível"
+            name="nivel"
+            control={form.control}
+            className="w-full"
+          />
+        </form>
+      </Form>
+      <Button type="submit" size="xs" className="ml-auto" form="levelForm">
+        Aplicar alterações
+      </Button>
     </DialogContent>
   );
 };
