@@ -45,7 +45,7 @@ export const Developers = () => {
     mutate();
   };
 
-  const handleClickEdit = () => {
+  const handleOpenDialog = () => {
     setOpenCreateDialog(true);
   };
 
@@ -57,7 +57,7 @@ export const Developers = () => {
           <h1 className="text-3xl font-bold tracking-tight">Desenvolvedores</h1>
           <Dialog open={openCreateDialog} onOpenChange={setOpenCreateDialog}>
             <DialogTrigger>
-              <Button size="xs" onClick={handleClickEdit}>
+              <Button size="xs" onClick={handleOpenDialog}>
                 <UserRoundPlus />
                 Cadastrar desenvolvedor
               </Button>
