@@ -76,7 +76,10 @@ export const Levels = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead>ID</TableHead>
-                  <TableHead className="w-[80%]">Nível</TableHead>
+                  <TableHead>Nível</TableHead>
+                  <TableHead>
+                    Quantidade de desenvolvedores associados
+                  </TableHead>
                   <TableHead></TableHead>
                   <TableHead></TableHead>
                 </TableRow>

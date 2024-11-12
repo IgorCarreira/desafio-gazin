@@ -37,6 +37,9 @@ export const LevelTableRow = ({ level, onUpdate }: LevelTableRowProps) => {
     <TableRow>
       <TableCell className="text-muted-foreground">{level.id}</TableCell>
       <TableCell className="font-medium">{level.nivel}</TableCell>
+      <TableCell className="font-medium">
+        {level.quantidade_desenvolvedores}
+      </TableCell>
 
       <TableCell>
         <Dialog open={openPatchDialog} onOpenChange={setOpenPatchDialog}>
@@ -59,7 +62,11 @@ export const LevelTableRow = ({ level, onUpdate }: LevelTableRowProps) => {
       <TableCell>
         <AlertDialog>
           <AlertDialogTrigger>
-            <Button variant="ghost" size="xs">
+            <Button
+              variant="ghost"
+              size="xs"
+              disabled={level.quantidade_desenvolvedores > 0}
+            >
               <X className=" size-3" />
               Remover
             </Button>

@@ -28,6 +28,11 @@ export async function listLevels(app: FastifyInstance) {
         where: filters,
         skip: offset,
         take: per_page,
+        include: {
+          _count: {
+            select: { Desenvolvedor: true },
+          },
+        },
       });
 
       const totalLevels = await prisma.nivel.count({
@@ -35,7 +40,11 @@ export async function listLevels(app: FastifyInstance) {
       });
 
       return reply.status(200).send({
-        data: levels,
+        data: levels.map((level) => ({
+          id: level.id,
+          nivel: level.nivel,
+          quantidade_desenvolvedores: level._count.Desenvolvedor, // Adiciona a contagem de devs
+        })),
         meta: {
           total: totalLevels,
           current_page,
@@ -91,6 +100,10 @@ const schema = {
             properties: {
               id: { type: "number", description: "ID do nível" },
               nivel: { type: "string", description: "Nome do nível" },
+              quantidade_desenvolvedores: {
+                type: "number",
+                description: "Quantidade de desenvolvedores associados",
+              },
             },
           },
         },
