@@ -48,7 +48,7 @@ export const Levels = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead>ID</TableHead>
-                  <TableHead>Nível</TableHead>
+                  <TableHead className="w-[80%]">Nível</TableHead>
                   <TableHead></TableHead>
                   <TableHead></TableHead>
                 </TableRow>

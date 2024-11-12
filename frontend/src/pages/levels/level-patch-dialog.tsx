@@ -50,12 +50,8 @@ export const LevelPatchDialog = ({
         <DialogTitle>Editar</DialogTitle>
       </DialogHeader>
 
-      <form
-        id="levelForm"
-        onSubmit={handleSubmit(onSubmit)}
-        className="grid grid-cols-2 gap-3"
-      >
-        <div className="space-y-2">
+      <form id="levelForm" onSubmit={handleSubmit(onSubmit)} className="flex">
+        <div className="space-y-2 w-full">
           <Label htmlFor="nivel">Nível</Label>
           <Input id="nivel" {...register("nivel")} />
         </div>
