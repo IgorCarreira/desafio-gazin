@@ -6,19 +6,21 @@ import { Prisma } from "@prisma/client";
 export async function listLevels(app: FastifyInstance) {
   app.get("/api/niveis", { schema }, async (request, reply) => {
     const querySchema = z.object({
+      id: z.coerce.number().optional(),
       nivel: z.string().optional(),
       current_page: z.number().min(1).default(1),
       per_page: z.number().min(1).max(100).default(10),
     });
 
     try {
-      const { nivel, current_page, per_page } = querySchema.parse(
+      const { nivel, current_page, per_page, id } = querySchema.parse(
         request.query
       );
 
       const offset = (current_page - 1) * per_page;
 
       const filters: Prisma.NivelWhereInput = {
+        ...(id && { id }),
         ...(nivel && { nivel: { contains: nivel, mode: "insensitive" } }),
       };
 

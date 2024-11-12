@@ -37,7 +37,7 @@ export const LevelFilters = ({ onSearch }: LevelFiltersProps) => {
   };
 
   const clearFilters = () => {
-    reset({ nivel: null });
+    reset({ nivel: null, id: null });
     onSearch({});
   };
 
