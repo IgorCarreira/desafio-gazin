@@ -1,23 +1,13 @@
 import { FastifyInstance } from "fastify";
-import { z } from "zod";
+import { coerce, z } from "zod";
 import { prisma } from "../../../lib/prisma";
 import { Prisma } from "@prisma/client";
 
 export async function listDevelopers(app: FastifyInstance) {
   app.get("/api/desenvolvedores", { schema }, async (request, reply) => {
     const querySchema = z.object({
-      id: z
-        .preprocess(
-          (arg) => (typeof arg === "string" ? Number(arg) : arg),
-          z.number()
-        )
-        .optional(),
-      nivel_id: z
-        .preprocess(
-          (arg) => (typeof arg === "string" ? Number(arg) : arg),
-          z.number()
-        )
-        .optional(),
+      id: z.coerce.number().optional(),
+      nivel_id: z.coerce.number().optional(),
       nome: z.string().optional(),
       sexo: z.string().optional(),
       current_page: z.number().min(1).default(1),
@@ -46,12 +36,21 @@ export async function listDevelopers(app: FastifyInstance) {
         },
       });
 
+      const developersWithAge = developers.map((developer) => {
+        const birthDate = new Date(developer.data_nascimento);
+        const age = new Date().getFullYear() - birthDate.getFullYear();
+        return {
+          ...developer,
+          idade: age,
+        };
+      });
+
       const totalDevelopers = await prisma.desenvolvedor.count({
         where: filters,
       });
 
       return reply.status(200).send({
-        data: developers,
+        data: developersWithAge,
         meta: {
           total: totalDevelopers,
           current_page,
@@ -110,6 +109,10 @@ const schema = {
                 type: "string",
                 format: "date",
                 description: "Data de nascimento",
+              },
+              idade: {
+                type: "number",
+                description: "Idade do desenvolvedor",
               },
               hobby: { type: "string", description: "Hobby do desenvolvedor" },
               nivel: {
