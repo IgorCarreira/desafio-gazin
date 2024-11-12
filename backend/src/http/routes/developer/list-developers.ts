@@ -6,7 +6,18 @@ import { Prisma } from "@prisma/client";
 export async function listDevelopers(app: FastifyInstance) {
   app.get("/api/desenvolvedores", { schema }, async (request, reply) => {
     const querySchema = z.object({
-      nivel_id: z.number().optional(),
+      id: z
+        .preprocess(
+          (arg) => (typeof arg === "string" ? Number(arg) : arg),
+          z.number()
+        )
+        .optional(),
+      nivel_id: z
+        .preprocess(
+          (arg) => (typeof arg === "string" ? Number(arg) : arg),
+          z.number()
+        )
+        .optional(),
       nome: z.string().optional(),
       sexo: z.string().optional(),
       current_page: z.number().min(1).default(1),
@@ -14,12 +25,13 @@ export async function listDevelopers(app: FastifyInstance) {
     });
 
     try {
-      const { nivel_id, nome, sexo, current_page, per_page } =
+      const { nivel_id, nome, sexo, current_page, per_page, id } =
         querySchema.parse(request.query);
 
       const offset = (current_page - 1) * per_page;
 
       const filters: Prisma.DesenvolvedorWhereInput = {
+        ...(id && { id }),
         ...(nivel_id && { nivel_id }),
         ...(nome && { nome: { contains: nome, mode: "insensitive" } }),
         ...(sexo && { sexo }),
