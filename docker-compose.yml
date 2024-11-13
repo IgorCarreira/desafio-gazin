@@ -11,5 +11,27 @@ services:
     volumes:
       - cadastro_desenvolvedor_data:/bitnami/postgresql
 
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: cadastro_desenvolvedor_backend
+    environment:
+      DATABASE_URL: postgresql://postgres:password@postgres:5432/cadastro_desenvolvedor?schema=public
+    ports:
+      - 3030:3030
+    depends_on:
+      - postgres
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cadastro_desenvolvedor_frontend
+    ports:
+      - 5173:5173
+    depends_on:
+      - backend
+
 volumes:
   cadastro_desenvolvedor_data:
