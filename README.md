@@ -42,6 +42,12 @@ Este projeto está disponível online e pode ser acessado diretamente pelos link
 - [Frontend](https://cadastro-desenvolvedores-web.onrender.com/)
 - [Backend](https://cadastro-desenvolvedores.onrender.com) | [Documentação](https://cadastro-desenvolvedores.onrender.com/docs)
 
+### Observação sobre o Ambiente de Hospedagem
+
+O projeto foi hospedado utilizando o serviço **Render** em um plano gratuito. Isso significa que, quando os servidores ficam inativos por um certo período, o Render pode "hibernar" os serviços. Como resultado, a primeira requisição após um período de inatividade pode demorar alguns segundos a mais para responder, pois o Render precisa "acordar" os servidores.
+
+Após a primeira requisição, o desempenho deve ser normal até que os servidores voltem a hibernar.
+
 ## Como Rodar o Projeto ❓
 
 Existem duas maneiras para executar o projeto localmente
