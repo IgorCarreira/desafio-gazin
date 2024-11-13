@@ -34,7 +34,7 @@ export const LevelPatchDialog = ({
 
   const onSubmit: SubmitHandler<LevelPatchSchema> = async (data) => {
     const response = await fetch(
-      `http://localhost:3030/api/niveis/${level.id}`,
+      `${import.meta.env.VITE_API_BASE_URL}/api/niveis/${level.id}`,
       {
         method: "PATCH",
         headers: {

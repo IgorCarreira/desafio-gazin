@@ -30,7 +30,11 @@ export const Levels = () => {
     perPage,
     total,
     mutate,
-  } = useFetchData<Level>("http://localhost:3030/api/niveis", page, query);
+  } = useFetchData<Level>(
+    `${import.meta.env.VITE_API_BASE_URL}/api/niveis`,
+    page,
+    query
+  );
 
   const onUpdate = () => {
     mutate();

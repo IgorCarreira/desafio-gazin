@@ -20,7 +20,9 @@ const DeveloperTableRow = ({ developer, onUpdate }: DeveloperTableRowProps) => {
 
   const handleClickDelete = async () => {
     const response = await fetch(
-      `http://localhost:3030/api/desenvolvedores/${developer.id}`,
+      `${import.meta.env.VITE_API_BASE_URL}/api/desenvolvedores/${
+        developer.id
+      }`,
       {
         method: "DELETE",
       }

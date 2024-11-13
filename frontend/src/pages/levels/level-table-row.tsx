@@ -19,7 +19,7 @@ export const LevelTableRow = ({ level, onUpdate }: LevelTableRowProps) => {
 
   const handleClickDelete = async () => {
     const response = await fetch(
-      `http://localhost:3030/api/niveis/${level.id}`,
+      `${import.meta.env.VITE_API_BASE_URL}/api/niveis/${level.id}`,
       {
         method: "DELETE",
       }

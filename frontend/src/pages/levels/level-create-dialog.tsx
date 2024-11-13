@@ -27,13 +27,16 @@ export const LevelCreateDialog = ({ onUpdate }: LevelPatchDialogProps) => {
   });
 
   const onSubmit: SubmitHandler<LevelCreateSchema> = async (data) => {
-    const response = await fetch(`http://localhost:3030/api/niveis`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    const response = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/api/niveis`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
 
     if (!response.ok) {
       return toast.error("Ocorreu um erro ao cadastrar o nível");

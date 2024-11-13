@@ -39,7 +39,7 @@ export const DeveloperCreateDialog = ({
   open,
 }: DeveloperCreateDialogProps) => {
   const { data: levelOptions } = useSWR<FetchDataResponse<Level>>(
-    open ? "http://localhost:3030/api/niveis" : null,
+    open ? `${import.meta.env.VITE_API_BASE_URL}/api/niveis` : null,
     fetcher
   );
 
@@ -49,13 +49,16 @@ export const DeveloperCreateDialog = ({
   });
 
   const onSubmit: SubmitHandler<DeveloperCreateSchema> = async (data) => {
-    const response = await fetch(`http://localhost:3030/api/desenvolvedores`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    const response = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/api/desenvolvedores`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
 
     if (!response.ok) {
       return toast.error("Ocorreu um erro ao criar o desenvolvedor");

@@ -30,7 +30,7 @@ export const Developers = () => {
     total,
     mutate,
   } = useFetchData<Developer>(
-    "http://localhost:3030/api/desenvolvedores",
+    `${import.meta.env.VITE_API_BASE_URL}/api/desenvolvedores`,
     page,
     query
   );

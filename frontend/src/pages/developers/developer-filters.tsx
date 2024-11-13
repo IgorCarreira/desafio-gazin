@@ -23,7 +23,7 @@ interface DeveloperFiltersProps {
 
 export const DeveloperFilters = ({ onSearch }: DeveloperFiltersProps) => {
   const { data: levelOptions } = useSWR<FetchDataResponse<Level>>(
-    "http://localhost:3030/api/niveis",
+    `${import.meta.env.VITE_API_BASE_URL}/api/niveis`,
     fetcher
   );
   const [searchParams] = useSearchParams();
