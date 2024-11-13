@@ -27,7 +27,7 @@ services:
       dockerfile: Dockerfile
     container_name: cadastro_desenvolvedor_frontend
     ports:
-      - 5173:5173
+      - 3000:3000
     depends_on:
       - backend
 

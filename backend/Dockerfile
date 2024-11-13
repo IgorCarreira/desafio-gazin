@@ -12,4 +12,4 @@ RUN npx prisma generate
 
 EXPOSE 3030
 
-CMD ["sh", "-c", "npx prisma migrate deploy && npm run seed && npm run dev"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npm run seed && npm run build && npm run start"]
