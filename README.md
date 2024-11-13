@@ -5,8 +5,8 @@ Este é um projeto de cadastro de desenvolvedores e seus respectivos níveis, co
 ## Tecnologias Utilizadas 🛠️
 
 - **NodeJs**: v20.11.0
-- **Backend**: Fastify, Prisma ORM, Swagger (documentação)
-- **Frontend**: React com Vite
+- **Backend**: Fastify, Prisma ORM, Swagger (documentação) e testes com Jest
+- **Frontend**: React com Vite e para estilização shadcn/ui com Tailwind
 - **Banco de Dados**: PostgreSQL
 - **Containerização**: Docker e Docker Compose
 
@@ -130,3 +130,29 @@ Isso inicia o frontend localmente (porta padrão: 5173).
 - **Backend**: http://localhost:3030
   - Documentação: http://localhost:3030/docs
 - **Frontend**: http://localhost:5173
+
+## Testes Automatizados 🧪
+
+O projeto possui testes automatizados no backend utilizando o framework **Jest**. Esses testes cobrem funcionalidades principais e ajudam a garantir a confiabilidade do código.
+
+### Executando os Testes
+
+Para rodar os testes, siga os passos abaixo:
+
+1. Entre na pasta do backend:
+
+   ```bash
+   cd backend
+   ```
+
+2. Execute o comando de testes:
+
+   ```bash
+   npm run test
+   ```
+
+   Esse comando irá executar todos os testes definidos no backend, exibindo os resultados diretamente no terminal.
+
+#### Observação
+
+Os testes foram configurados para cobrir os endpoints e funcionalidades principais do backend, garantindo que estejam funcionando conforme esperado.
