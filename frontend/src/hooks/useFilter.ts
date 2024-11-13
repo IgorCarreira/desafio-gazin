@@ -10,15 +10,28 @@ export const useFilter = <T>() => {
 
     return 1;
   });
+
   const [query, setQuery] = useState<T>(() => {
     const url = new URL(window.location.toString());
 
     const result: Record<string, unknown> = {};
     Object.entries(url.searchParams).forEach(([key, value]) => {
-      if (value && key !== "current_page") result[key] = value;
+      if (value && !["current_page", "sort_order", "sort_field"].includes(key))
+        result[key] = value;
     });
 
     return result as T;
+  });
+
+  const [order, setOrder] = useState<{
+    field: string | null;
+    direction: "asc" | "desc" | null;
+  }>(() => {
+    const url = new URL(window.location.toString());
+    const field = url.searchParams.get("sort_field") || "";
+    const direction =
+      (url.searchParams.get("sort_order") as "asc" | "desc") || null;
+    return { field, direction };
   });
 
   useEffect(() => {
@@ -35,35 +48,76 @@ export const useFilter = <T>() => {
     setQuery(initialQuery as T);
   }, []);
 
-  const updateURLParams = useCallback((newParams: T) => {
-    const url = new URL(window.location.toString());
-    Array.from(url.searchParams.keys()).forEach((key) => {
-      url.searchParams.delete(key);
-    });
-    Object.entries(newParams as Record<string, unknown>).forEach(
-      ([key, value]) => {
-        if (value) url.searchParams.set(key, String(value));
-      }
-    );
-    window.history.pushState({}, "", url);
+  const resetParams = useCallback((url?: URL) => {
+    const currentUrl = url || new URL(window.location.toString());
+    currentUrl.search = "";
+    window.history.pushState({}, "", currentUrl);
   }, []);
+
+  const updateURLParams = useCallback(
+    (newParams: T) => {
+      const url = new URL(window.location.toString());
+
+      resetParams(url);
+
+      Object.entries(newParams as Record<string, unknown>).forEach(
+        ([key, value]) => {
+          if (value) url.searchParams.set(key, String(value));
+        }
+      );
+      window.history.pushState({}, "", url);
+    },
+    [resetParams]
+  );
 
   const updatePage = useCallback(
     (newPage: number) => {
+      const url = new URL(window.location.toString());
       setPage(newPage);
-      updateURLParams({ ...query, current_page: newPage });
+      url.searchParams.set("current_page", String(newPage));
+      if (newPage <= 1) url.searchParams.delete("current_page");
+      window.history.pushState({}, "", url);
     },
-    [query, updateURLParams]
+    [query]
   );
 
   const updateQuery = useCallback(
     (newQuery: Record<string, any>) => {
       setPage(1);
+      setOrder({ direction: null, field: null });
       setQuery(newQuery as T);
       updateURLParams(newQuery as T);
     },
     [updateURLParams]
   );
 
-  return { page, query, updatePage, updateQuery };
+  const updateOrder = useCallback((field: string) => {
+    updatePage(1);
+    setOrder((prevOrder) => {
+      const newDirection: "asc" | "desc" =
+        prevOrder.field === field && prevOrder.direction === "asc"
+          ? "desc"
+          : "asc";
+      const newOrder = { field, direction: newDirection };
+
+      const url = new URL(window.location.toString());
+      if (prevOrder.field !== field) {
+        url.searchParams.delete("sort_field");
+        url.searchParams.delete("sort_order");
+      }
+      url.searchParams.set("sort_field", field);
+      url.searchParams.set("sort_order", newDirection);
+      window.history.pushState({}, "", url);
+
+      setQuery((oldQuery) => ({
+        ...oldQuery,
+        sort_field: field,
+        sort_order: newDirection,
+      }));
+
+      return newOrder;
+    });
+  }, []);
+
+  return { page, query, order, updatePage, updateQuery, updateOrder };
 };
