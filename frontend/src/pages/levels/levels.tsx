@@ -11,7 +11,7 @@ import {
 import useFetchData from "@/hooks/useFetchData";
 import { useFilter } from "@/hooks/useFilter";
 import { Level, LevelFilterRequest } from "@/types/level";
-import { ArrowDown, ArrowUp, ArrowUpDown, Plus } from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpDown, Loader2, Plus } from "lucide-react";
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { LevelCreateDialog } from "./level-create-dialog";
@@ -30,6 +30,7 @@ export const Levels = () => {
     perPage,
     total,
     mutate,
+    isLoading,
   } = useFetchData<Level>(
     `${import.meta.env.VITE_API_BASE_URL}/api/niveis`,
     page,
@@ -60,6 +61,13 @@ export const Levels = () => {
 
     return <ArrowDown />;
   };
+
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center h-[50vh]">
+        <Loader2 className="animate-spin" />
+      </div>
+    );
 
   return (
     <>

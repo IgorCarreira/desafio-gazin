@@ -11,7 +11,13 @@ import {
 import useFetchData from "@/hooks/useFetchData";
 import { useFilter } from "@/hooks/useFilter";
 import { Developer, DeveloperFilterRequest } from "@/types/developer";
-import { ArrowDown, ArrowUp, ArrowUpDown, UserRoundPlus } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
+  Loader2,
+  UserRoundPlus,
+} from "lucide-react";
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { DeveloperCreateDialog } from "./developer-create-dialog";
@@ -29,6 +35,7 @@ export const Developers = () => {
     perPage,
     total,
     mutate,
+    isLoading,
   } = useFetchData<Developer>(
     `${import.meta.env.VITE_API_BASE_URL}/api/desenvolvedores`,
     page,
@@ -60,6 +67,13 @@ export const Developers = () => {
 
     return <ArrowDown />;
   };
+
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center h-[50vh]">
+        <Loader2 className="animate-spin" />
+      </div>
+    );
 
   return (
     <>
