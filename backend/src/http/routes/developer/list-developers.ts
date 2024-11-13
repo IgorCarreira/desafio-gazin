@@ -8,15 +8,25 @@ export async function listDevelopers(app: FastifyInstance) {
     const querySchema = z.object({
       id: z.coerce.number().optional(),
       nivel_id: z.coerce.number().optional(),
-      nome: z.string().optional(),
       sexo: z.string().optional(),
+      nome: z.string().optional(),
+      sort_field: z.string().optional(),
+      sort_order: z.string().optional(),
       current_page: z.number().min(1).default(1),
       per_page: z.number().min(1).max(100).default(10),
     });
 
     try {
-      const { nivel_id, nome, sexo, current_page, per_page, id } =
-        querySchema.parse(request.query);
+      const {
+        nivel_id,
+        nome,
+        sexo,
+        current_page,
+        per_page,
+        id,
+        sort_field,
+        sort_order,
+      } = querySchema.parse(request.query);
 
       const offset = (current_page - 1) * per_page;
 
@@ -31,6 +41,12 @@ export async function listDevelopers(app: FastifyInstance) {
         where: filters,
         skip: offset,
         take: per_page,
+        ...(sort_field &&
+          sort_order && {
+            orderBy: {
+              [sort_field]: sort_order,
+            },
+          }),
         include: {
           nivel: true,
         },

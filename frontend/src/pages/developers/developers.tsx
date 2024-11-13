@@ -11,7 +11,7 @@ import {
 import useFetchData from "@/hooks/useFetchData";
 import { useFilter } from "@/hooks/useFilter";
 import { Developer, DeveloperFilterRequest } from "@/types/developer";
-import { UserRoundPlus } from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpDown, UserRoundPlus } from "lucide-react";
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { DeveloperCreateDialog } from "./developer-create-dialog";
@@ -20,7 +20,7 @@ import DeveloperTableRow from "./developers-table-row";
 
 export const Developers = () => {
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
-  const { page, query, updatePage, updateQuery } =
+  const { page, query, updatePage, updateQuery, updateOrder, order } =
     useFilter<DeveloperFilterRequest>();
 
   const {
@@ -47,6 +47,18 @@ export const Developers = () => {
 
   const handleOpenDialog = () => {
     setOpenCreateDialog(true);
+  };
+
+  const handleClickOrder = (name: string) => {
+    updateOrder(name);
+  };
+
+  const getArrowIcon = (field: string) => {
+    if (order.field !== field) return <ArrowUpDown />;
+
+    if (order.direction === "asc") return <ArrowUp />;
+
+    return <ArrowDown />;
   };
 
   return (
@@ -77,13 +89,69 @@ export const Developers = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>ID</TableHead>
-                  <TableHead>Nome</TableHead>
-                  <TableHead>Sexo</TableHead>
-                  <TableHead>Data de nascimento</TableHead>
-                  <TableHead>Idade</TableHead>
-                  <TableHead>Hobby</TableHead>
-                  <TableHead>Nível</TableHead>
+                  <TableHead>
+                    <Button
+                      variant="ghost"
+                      onClick={() => handleClickOrder("id")}
+                    >
+                      ID
+                      {getArrowIcon("id")}
+                    </Button>
+                  </TableHead>
+                  <TableHead>
+                    <Button
+                      variant="ghost"
+                      onClick={() => handleClickOrder("nome")}
+                    >
+                      Nome
+                      {getArrowIcon("nome")}
+                    </Button>
+                  </TableHead>
+                  <TableHead>
+                    <Button
+                      variant="ghost"
+                      onClick={() => handleClickOrder("sexo")}
+                    >
+                      Sexo
+                      {getArrowIcon("sexo")}
+                    </Button>
+                  </TableHead>
+                  <TableHead>
+                    <Button
+                      variant="ghost"
+                      onClick={() => handleClickOrder("data_nascimento")}
+                    >
+                      Data de nascimento
+                      {getArrowIcon("data_nascimento")}
+                    </Button>
+                  </TableHead>
+                  <TableHead>
+                    <Button
+                      variant="ghost"
+                      onClick={() => handleClickOrder("data_nascimento")}
+                    >
+                      Idade
+                      {getArrowIcon("data_nascimento")}
+                    </Button>
+                  </TableHead>
+                  <TableHead>
+                    <Button
+                      variant="ghost"
+                      onClick={() => handleClickOrder("hobby")}
+                    >
+                      Hobby
+                      {getArrowIcon("hobby")}
+                    </Button>
+                  </TableHead>
+                  <TableHead>
+                    <Button
+                      variant="ghost"
+                      onClick={() => handleClickOrder("nivel_id")}
+                    >
+                      Nível
+                      {getArrowIcon("nivel_id")}
+                    </Button>
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
