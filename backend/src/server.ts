@@ -41,6 +41,10 @@ app.register(updateDeveloper);
 app.register(deleteDeveloper);
 app.register(listDevelopers);
 
-app.listen({ port: 3030 }).then(() => {
-  console.log("HTTP server running");
+app.listen({ port: 3030, host: "0.0.0.0" }, (err, address) => {
+  if (err) {
+    console.log(err);
+    process.exit(1);
+  }
+  console.log(`HTTP Server running at ${address}`);
 });
