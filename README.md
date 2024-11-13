@@ -75,8 +75,7 @@ Configurações Iniciais
 Instale as dependências do projeto (na raiz):
 
 ```bash
-cd backend && npm install
-cd ../frontend && npm install
+cd backend && npm install && cd ../frontend && npm install && cd ..
 ```
 
 #### Configurar o Banco de Dados com Prisma
