@@ -8,10 +8,8 @@ RUN npm install
 
 COPY . .
 
-COPY .env .env
-
 RUN npx prisma generate
 
 EXPOSE 3030
 
-CMD ["npm", "run", "dev"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npm run seed && npm run dev"]

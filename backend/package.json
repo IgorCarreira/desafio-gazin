@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "seed": "tsx prisma/seed.ts",
     "dev": "tsx watch --env-file .env src/server.ts",
     "test": "jest --no-cache"
   },
