@@ -60,7 +60,7 @@ export const DatePickerField = ({
   );
 
   const RenderField = ({ field }: any) => {
-    const [date, setDate] = useState<Date>(field.value);
+    const [date, setDate] = useState<Date>(field.value || new Date());
 
     const handleMonthChange = (month: string) => {
       const newDate = setMonth(date, months.indexOf(month));
