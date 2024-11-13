@@ -11,7 +11,7 @@ import {
 import useFetchData from "@/hooks/useFetchData";
 import { useFilter } from "@/hooks/useFilter";
 import { Level, LevelFilterRequest } from "@/types/level";
-import { Plus } from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpDown, Plus } from "lucide-react";
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { LevelCreateDialog } from "./level-create-dialog";
@@ -21,7 +21,7 @@ import { LevelTableRow } from "./level-table-row";
 export const Levels = () => {
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
 
-  const { page, query, updatePage, updateQuery } =
+  const { page, query, updatePage, updateQuery, order, updateOrder } =
     useFilter<LevelFilterRequest>();
 
   const {
@@ -43,6 +43,18 @@ export const Levels = () => {
 
   const handleOpenDialog = () => {
     setOpenCreateDialog(true);
+  };
+
+  const handleClickOrder = (name: string) => {
+    updateOrder(name);
+  };
+
+  const getArrowIcon = (field: string) => {
+    if (order.field !== field) return <ArrowUpDown />;
+
+    if (order.direction === "asc") return <ArrowUp />;
+
+    return <ArrowDown />;
   };
 
   return (
@@ -75,8 +87,24 @@ export const Levels = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>ID</TableHead>
-                  <TableHead>Nível</TableHead>
+                  <TableHead>
+                    <Button
+                      variant="ghost"
+                      onClick={() => handleClickOrder("id")}
+                    >
+                      ID
+                      {getArrowIcon("id")}
+                    </Button>
+                  </TableHead>
+                  <TableHead>
+                    <Button
+                      variant="ghost"
+                      onClick={() => handleClickOrder("nivel")}
+                    >
+                      Nivel
+                      {getArrowIcon("nivel")}
+                    </Button>
+                  </TableHead>
                   <TableHead>
                     Quantidade de desenvolvedores associados
                   </TableHead>
