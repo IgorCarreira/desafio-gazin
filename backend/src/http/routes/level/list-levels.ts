@@ -43,7 +43,7 @@ export async function listLevels(app: FastifyInstance) {
         data: levels.map((level) => ({
           id: level.id,
           nivel: level.nivel,
-          quantidade_desenvolvedores: level._count.Desenvolvedor, // Adiciona a contagem de devs
+          quantidade_desenvolvedores: level?._count?.Desenvolvedor, // Adiciona a contagem de devs
         })),
         meta: {
           total: totalLevels,
