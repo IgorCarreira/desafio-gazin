@@ -16,8 +16,6 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: cadastro_desenvolvedor_backend
-    environment:
-      DATABASE_URL: postgresql://postgres:password@postgres:5432/cadastro_desenvolvedor?schema=public
     ports:
       - 3030:3030
     depends_on:
