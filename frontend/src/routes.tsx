@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import { NotFound } from "./pages/404";
 import AppLayout from "./pages/_layout/app";
 import { Levels } from "./pages/levels/levels";
@@ -13,7 +13,7 @@ export const router = createBrowserRouter(
       children: [
         {
           path: "/",
-          element: <Developers />,
+          element: <Navigate to="/desenvolvedores" replace />,
         },
         {
           path: "/desenvolvedores",
