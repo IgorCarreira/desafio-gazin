@@ -4,6 +4,7 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
+  TableCell,
   TableHead,
   TableHeader,
   TableRow,
@@ -67,13 +68,6 @@ export const Developers = () => {
 
     return <ArrowDown />;
   };
-
-  if (isLoading)
-    return (
-      <div className="flex justify-center items-center h-[50vh]">
-        <Loader2 className="animate-spin" />
-      </div>
-    );
 
   return (
     <>
@@ -169,13 +163,21 @@ export const Developers = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {developers?.map((dev) => (
-                  <DeveloperTableRow
-                    developer={dev}
-                    onUpdate={onUpdate}
-                    key={dev.id}
-                  />
-                ))}
+                {isLoading ? (
+                  <TableRow>
+                    <TableCell colSpan={7} align="center">
+                      <Loader2 className="animate-spin" />
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  developers?.map((dev) => (
+                    <DeveloperTableRow
+                      developer={dev}
+                      onUpdate={onUpdate}
+                      key={dev.id}
+                    />
+                  ))
+                )}
               </TableBody>
             </Table>
           </div>

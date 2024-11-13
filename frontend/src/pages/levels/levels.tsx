@@ -4,6 +4,7 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
+  TableCell,
   TableHead,
   TableHeader,
   TableRow,
@@ -62,13 +63,6 @@ export const Levels = () => {
     return <ArrowDown />;
   };
 
-  if (isLoading)
-    return (
-      <div className="flex justify-center items-center h-[50vh]">
-        <Loader2 className="animate-spin" />
-      </div>
-    );
-
   return (
     <>
       <Helmet title="Níveis" />
@@ -125,9 +119,21 @@ export const Levels = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {levels?.map((lvl) => (
-                  <LevelTableRow level={lvl} onUpdate={onUpdate} key={lvl.id} />
-                ))}
+                {isLoading ? (
+                  <TableRow>
+                    <TableCell colSpan={3} align="center">
+                      <Loader2 className="animate-spin" />
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  levels?.map((lvl) => (
+                    <LevelTableRow
+                      level={lvl}
+                      onUpdate={onUpdate}
+                      key={lvl.id}
+                    />
+                  ))
+                )}
               </TableBody>
             </Table>
           </div>
